@@ -1,0 +1,48 @@
+import pandas as pd
+import numpy as np
+import random
+from faker import Faker
+from faker.config import AVAILABLE_LOCALES
+
+# create some fake data
+fake = Faker('en_GB')
+
+# function to create a dataframe with fake values for our workers
+def make_spe(num):
+    
+    # Depth
+    depth_list = ['0', '1', '2', '3', '4','5']
+    country_list = ['GB', 'DE', 'FR', 'NL', 'US','SG']
+    percent_list = ['1', '0.80','0.70','0.25','0.75','0.50' ]
+    nace_code_list = ['K', 'L','I', 'C', 'N']
+    no_employee_list = ['1', '4', '6','10','20', 'NA']
+    year_list = ['2019']
+    
+
+# assign items from list with different probabilities
+
+    fake_spe = [{
+                  'Depth': np.random.choice(depth_list, p=[0.30, 0.25, 0.25, 0.15, 0.05, 0.00]),
+                  'T_Percent': np.random.choice(percent_list, p=[0.10, 0.60, 0.10, 0.10, 0.05, 0.05]), 
+                  'D_Percent': np.random.choice(percent_list, p=[0.10, 0.60, 0.10, 0.10, 0.05, 0.05]), 
+                  'Subsidiary_BvDID':str(np.random.choice(country_list, p=[0.60, 0.10, 0.10, 0.10, 0.05, 0.05])) + str(random.randrange(10000000, 99999999)),
+                  'Postcode' : fake.postcode(),
+                  'Shareholder': str(np.random.choice(country_list, p=[0.60, 0.10, 0.10, 0.10, 0.05, 0.05])) + str(random.randrange(10000000, 99999999)),
+                  'NACE_code' : np.random.choice(nace_code_list),
+                  'Number_of_employees_(last_vale)_(LY)': np.random.choice(no_employee_list, p=[0.50, 0.20, 0.10, 0.10, 0.00, 0.10]),
+                  'Subsidiary_Country_ISO_Code' : np.random.choice(country_list, p=[0.60, 0.10, 0.10, 0.10, 0.05, 0.05]),
+                  'Shareholder_Country_ISO_Code': np.random.choice(country_list, p=[0.60, 0.10, 0.10, 0.10, 0.05, 0.05]),
+                  'Total_assents_th_GBP_(LY)_47': random.randrange(0, 50000),
+                  'Operating_revenue_(Turnover)_th_GBP_(LY)': random.randrange(0, 30000),
+                  'Year': np.random.choice(year_list),
+                  'apex_UK' : 'GB'+ str(random.randrange(10000000, 99999999))
+                  } for x in range(num)]
+        
+    return fake_spe
+
+spe_df = pd.DataFrame(make_spe(num=20))
+#worker_df.head()
+
+#spe_df.to_csv('Fake_SPE_data.csv', index=False)
+
+pd.DataFrame(spe_df)
